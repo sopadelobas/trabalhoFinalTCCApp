@@ -1,12 +1,27 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AccountMenu from '../components/AccountMenu';
+import Loading from '../components/loading';
 
 export default function HomeScreen() {
   const router = useRouter();
   const [menuVisible, setMenuVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simula uma requisição à API ou carregamento de dados
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <Loading mensagem="A carregar dados..." />;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -19,7 +34,8 @@ export default function HomeScreen() {
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>
-        <TouchableOpacity style={styles.cardHeader}>
+        <TouchableOpacity style={styles.cardHeader}
+        onPress={() => router.push('/controle-doacoes')}>
           <Ionicons name="people-outline" size={24} color="#169BBA" />
           <Text style={styles.cardHeaderText}>Pessoas alcançadas</Text>
         </TouchableOpacity>
@@ -27,13 +43,14 @@ export default function HomeScreen() {
         <View style={styles.whiteContainer}>
           <TouchableOpacity 
             style={styles.actionButton} 
-            onPress={() => router.push('/controle-doacoes')}
+            onPress={() => router.push('/necessidade')}
           >
             <Ionicons name="heart-outline" size={20} color="#169BBA" />
             <Text style={styles.actionButtonText}>Sua ajuda me fortalece</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.actionButton}>
+          <TouchableOpacity style={styles.actionButton}
+          onPress={() => router.push('/pontos')}>
             <Ionicons name="people-outline" size={20} color="#169BBA" />
             <Text style={styles.actionButtonText}>Fortalecer os laços</Text>
           </TouchableOpacity>
@@ -53,13 +70,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingTop: 40,
-    paddingBottom: 20,
+    paddingTop: 70,
+    paddingBottom: 60,
   },
   greeting: { color: '#FFF', fontSize: 18, fontWeight: 'bold' },
   profileCircle: {
     width: 36,
-    height: 36,
+    height: 37,
     borderRadius: 18,
     backgroundColor: '#FFF',
     justifyContent: 'center',
@@ -84,14 +101,14 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     width: '100%',
     alignItems: 'center',
-    paddingTop: 30,
-    gap: 15,
+    paddingTop: 70,
+    gap: 50,
   },
   actionButton: {
     borderWidth: 1,
     borderColor: '#169BBA',
     borderRadius: 20,
-    paddingVertical: 15,
+    paddingVertical: 20,
     paddingHorizontal: 20,
     width: '80%',
     flexDirection: 'row',

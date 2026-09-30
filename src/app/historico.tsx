@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
+import AccountMenu from '../components/AccountMenu';
 import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const doacoes = [
@@ -50,8 +51,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     marginTop: 80,
     marginHorizontal: 15,
+    marginVertical: 50,
     borderRadius: 25,
-    padding: 20,
+    padding: 30,
     alignItems: 'center',
   },
   title: { color: '#169BBA', fontSize: 18, fontWeight: 'bold', marginBottom: 20 },

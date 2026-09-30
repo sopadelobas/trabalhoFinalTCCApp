@@ -23,7 +23,8 @@ export default function MetasScreen() {
           </View>
           <Text style={styles.percentText}>100%</Text>
 
-          <TouchableOpacity style={styles.outlineBtn}>
+          <TouchableOpacity style={styles.outlineBtn}
+          onPress={() => router.push('/aumentaMeta')}>
             <Text style={styles.outlineBtnText}>CONCLUIR META</Text>
           </TouchableOpacity>
 
@@ -49,13 +50,14 @@ const styles = StyleSheet.create({
   whiteCard: {
     flex: 1,
     backgroundColor: '#FFF',
-    marginTop: 80,
+    marginTop: 90,
     marginHorizontal: 15,
+    marginBottom:70,
     borderRadius: 25,
-    padding: 20,
+    padding: 25,
   },
   scrollContent: { alignItems: 'center' },
-  mainTitle: { color: '#169BBA', fontSize: 16, fontWeight: 'bold', marginBottom: 5 },
+  mainTitle: { color: '#169BBA', fontSize: 16, fontWeight: 'bold', marginBottom: 30 },
   subTitle: { color: '#333', fontSize: 14, fontWeight: 'bold', marginBottom: 10 },
   progressBg: {
     width: '90%',
@@ -71,9 +73,9 @@ const styles = StyleSheet.create({
     borderColor: '#169BBA',
     borderRadius: 15,
     width: '85%',
-    paddingVertical: 10,
+    paddingVertical: 15,
     alignItems: 'center',
-    marginVertical: 5,
+    marginVertical: 20,
   },
   outlineBtnText: { color: '#169BBA', fontWeight: 'bold', fontSize: 13 },
 });

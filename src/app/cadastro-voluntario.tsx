@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 80,
-    width:400,
+    width:200,
     borderWidth: 1,
     borderColor: '#169BBA',
     borderRadius: 23,
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   button: {
-    height: 100,
+    height: 80,
     backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',

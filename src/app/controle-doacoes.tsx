@@ -30,7 +30,7 @@ export default function ControleDoacoesScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#169BBA', alignItems: 'center' },
   backBtn: { position: 'absolute', top: 40, left: 20 },
-  title: { color: '#FFF', fontSize: 20, fontWeight: 'bold', marginTop: 100, marginBottom: 40 },
+  title: { color: '#FFF', fontSize: 20, fontWeight: 'bold', marginTop: 100, marginBottom: 80 },
   whiteCard: {
     flex: 1,
     backgroundColor: '#FFF',
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     alignItems: 'center',
-    paddingTop: 50,
+    paddingTop: 70,
     gap: 20,
   },
   button: {
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     borderColor: '#169BBA',
     borderRadius: 15,
     width: '75%',
-    paddingVertical: 15,
+    paddingVertical: 30,
     alignItems: 'center',
   },
   buttonText: { color: '#169BBA', fontWeight: 'bold', fontSize: 16 },
