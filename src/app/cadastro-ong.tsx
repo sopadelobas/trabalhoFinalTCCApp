@@ -34,6 +34,7 @@ export default function CadastroONGScreen() {
                          source={require('../../assets/images/UNIONG.png')} // <- Ajustado caminho com ../../
                          style={styles.imagem}
                        />
+                       
                      </View>
 
       <View style={styles.card}>

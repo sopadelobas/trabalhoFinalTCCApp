@@ -1,16 +1,23 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
+import { useMenu } from '../components/context/MenuContext';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function MetasScreen() {
   const router = useRouter();
+  const { openMenu } = useMenu();
 
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
         <Ionicons name="chevron-back" size={28} color="#FFF" />
       </TouchableOpacity>
+      <View style={styles.topBarRightOnly}>
+            <TouchableOpacity style={styles.profileCircle} onPress={openMenu}>
+        <Ionicons name="person" size={16} color="#169BBA" />
+      </TouchableOpacity>
+      </View>
 
       <View style={styles.whiteCard}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -65,6 +72,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#E0E0E0',
     borderRadius: 10,
     overflow: 'hidden',
+  },
+  topBarRightOnly: {
+    flexDirection: 'row',
+    justifyContent: 'space-between', // ou 'flex-end' se não houver botão de voltar
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 40,
+  },
+  profileCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#FFF',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   progressFill: { height: '100%', backgroundColor: '#169BBA' },
   percentText: { color: '#169BBA', fontWeight: 'bold', marginVertical: 8 },

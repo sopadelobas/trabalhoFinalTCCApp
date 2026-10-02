@@ -2,9 +2,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useMenu } from '../components/context/MenuContext'; // Import do useMenu correto
 
 export default function MetaAlcancadaScreen() {
   const router = useRouter();
+  const { openMenu } = useMenu(); // Acesso à função de abrir o menu
 
   return (
     <SafeAreaView style={styles.container}>
@@ -13,12 +15,14 @@ export default function MetaAlcancadaScreen() {
         <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
           <Ionicons name="chevron-back" size={24} color="#FFF" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.profileCircle}>
-          <Ionicons name="person" size={16} color="#169BBA" />
+
+        {/* Botão de Perfil que abre o Menu Lateral */}
+        <TouchableOpacity style={styles.profileCircle} onPress={openMenu}>
+          <Ionicons name="person-circle-outline" size={24} color="#169BBA" />
         </TouchableOpacity>
       </View>
 
-      {/* Ícone de Alvo / Troféu no topo azul */}
+      {/* Ícone de Alvo no topo azul */}
       <View style={styles.headerIconContainer}>
         <View style={styles.targetIconCircle}>
           <Ionicons name="navigate-outline" size={48} color="#FFF" />
@@ -60,7 +64,7 @@ export default function MetaAlcancadaScreen() {
           </TouchableOpacity>
         </ScrollView>
 
-        {/* Rodapé de direitos autorais */}
+        {/* Rodapé */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>Todos os direitos reservados ©</Text>
         </View>
@@ -85,9 +89,9 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   profileCircle: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: '#FFF',
     justifyContent: 'center',
     alignItems: 'center',

@@ -1,18 +1,26 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useMenu } from '../components/context/MenuContext'; // Ajuste o caminho se necessário
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function ControleDoacoesScreen() {
   const router = useRouter();
+  const { openMenu } = useMenu();
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-        <Ionicons name="chevron-back" size={28} color="#FFF" />
-      </TouchableOpacity>
+  <View style={styles.topBar}>
+    <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+      <Ionicons name="chevron-back" size={24} color="#FFF" />
+    </TouchableOpacity>
 
-      <Text style={styles.title}>CONTROLE DE DOAÇÕES</Text>
+    <TouchableOpacity style={styles.profileCircle} onPress={openMenu}>
+      <Ionicons name="person" size={16} color="#169BBA" />
+    </TouchableOpacity>
+  </View>
+
+  <Text style={styles.title}>CONTROLE DE DOAÇÕES</Text>
 
       <View style={styles.whiteCard}>
         <TouchableOpacity style={styles.button} onPress={() => router.push('/historico')}>
@@ -29,7 +37,6 @@ export default function ControleDoacoesScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#169BBA', alignItems: 'center' },
-  backBtn: { position: 'absolute', top: 40, left: 20 },
   title: { color: '#FFF', fontSize: 20, fontWeight: 'bold', marginTop: 100, marginBottom: 80 },
   whiteCard: {
     flex: 1,
@@ -41,6 +48,25 @@ const styles = StyleSheet.create({
     paddingTop: 70,
     gap: 20,
   },
+  topBar: {
+  width: '100%',
+  flexDirection: 'row',
+  justifyContent: 'space-between', // Empurra a seta para a esquerda e o perfil para a direita
+  alignItems: 'center',
+  paddingHorizontal: 20,
+  paddingTop: 20,
+},
+backBtn: {
+  padding: 5,
+},
+profileCircle: {
+  width: 32,
+  height: 32,
+  borderRadius: 16,
+  backgroundColor: '#FFF',
+  justifyContent: 'center',
+  alignItems: 'center',
+},
   button: {
     borderWidth: 1,
     borderColor: '#169BBA',

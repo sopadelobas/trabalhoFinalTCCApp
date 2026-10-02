@@ -33,11 +33,19 @@ export default function AccountMenu({ visible, onClose }: Props) {
           <Text style={styles.title}>CONTA</Text>
 
           <View style={styles.menuItems}>
-            <TouchableOpacity style={styles.item} onPress={() => handleNavigate('/informacoes')}>
+            {/* Rota atualizada para a tela de edição de informações da ONG */}
+            <TouchableOpacity 
+              style={styles.item} 
+              onPress={() => handleNavigate('/ong-editar-informacoes')}
+            >
               <Text style={styles.itemText}>• Informações</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.item} onPress={() => handleNavigate('/mensagens')}>
+            {/* Rota atualizada para a lista de mensagens */}
+            <TouchableOpacity 
+              style={styles.item} 
+              onPress={() => handleNavigate('/dm-ong')}
+            >
               <Text style={styles.itemText}>• Mensagens</Text>
             </TouchableOpacity>
           </View>
