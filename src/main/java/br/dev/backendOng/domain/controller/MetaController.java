@@ -4,16 +4,8 @@
  */
 package br.dev.backendOng.domain.controller;
 
-/**
- *
- * @author Aluno
- */
+import br.dev.backendOng.domain.service.MetaService;
 public class MetaController {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        // TODO code application logic here
-    }
+    
+    private MetaService metaService;
 }
