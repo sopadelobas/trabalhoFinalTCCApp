@@ -21,6 +21,7 @@ export default function CadastroONGScreen() {
     alvara: '',
     email: '',
     senha: '',
+    descricao: '',
   });
 
   const handleChange = (field: string, value: string) => {
@@ -61,6 +62,7 @@ export default function CadastroONGScreen() {
             value={form.responsavel}
             onChangeText={(v) => handleChange('responsavel', v)}
           />
+          
           <TextInput
             style={styles.input}
             placeholder="CEP da ONG"
@@ -84,6 +86,14 @@ export default function CadastroONGScreen() {
             autoCapitalize="none"
             value={form.email}
             onChangeText={(v) => handleChange('email', v)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Descrição"
+            placeholderTextColor="#9EA5B1"
+            keyboardType="numeric"
+            value={form.cnpj}
+            onChangeText={(v) => handleChange('cnpj', v)}
           />
           <TextInput
             style={styles.input}
