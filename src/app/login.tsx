@@ -1,9 +1,8 @@
-import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-  Image,
   Alert,
+  Image,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -11,11 +10,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useMenu } from '../components/context/MenuContext'; // 1. IMPORTA O USEMENU
+import { useMenu } from '../components/context/MenuContext';
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { setUserType } = useMenu(); // 2. PEGA A FUNÇÃO SETUSERTYPE DO CONTEXTO
+  const { setUserType } = useMenu();
 
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -24,33 +23,36 @@ export default function LoginScreen() {
   const handleLoginVoluntario = () => {
     if (!email || !senha) {
       Alert.alert('Atenção', 'Por favor, preencha o e-mail e a senha.');
+
+      
+      router.push('/home-v');
       return;
     }
 
-    setUserType('VOLUNTARIO'); // 3. DEFINE O MENU COMO VOLUNTÁRIO
-    router.push('/home-v'); // Redireciona para a home do voluntário
+    setUserType('VOLUNTARIO');
+    router.push('/home-v');
   };
 
-  
   // Função para Entrar como ONG
   const handleLoginONG = () => {
     if (!email || !senha) {
       Alert.alert('Atenção', 'Por favor, preencha o e-mail e a senha.');
+      router.push('/home');
       return;
     }
 
-    setUserType('ONG'); // 4. DEFINE O MENU COMO ONG
-    router.push('/home'); // Redireciona para a home da ONG
+    setUserType('ONG');
+    router.push('/home');
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.logoContainer}>
-                             <Image
-                               source={require('../../assets/images/UNIONG.png')} // <- Ajustado caminho com ../../
-                               style={styles.imagem}
-                             />
-                             </View>
+        <Image
+          source={require('../../assets/images/UNIONG.png')}
+          style={styles.imagem}
+        />
+      </View>
 
       <View style={styles.whiteCard}>
         <View style={styles.formGroup}>
@@ -79,20 +81,20 @@ export default function LoginScreen() {
         </View>
 
         {/* Botão Entrar como Voluntário */}
-       <TouchableOpacity 
-  style={styles.btnPrimary} 
-  onPress={() => router.push('/home-v')}
->
-  <Text style={styles.btnPrimaryText}>ENTRAR COMO VOLUNTÁRIO</Text>
-</TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.btnPrimary} 
+          onPress={handleLoginVoluntario}
+        >
+          <Text style={styles.btnPrimaryText}>ENTRAR COMO VOLUNTÁRIO</Text>
+        </TouchableOpacity>
 
-{/* Botão Entrar como ONG */}
-<TouchableOpacity 
-  style={styles.btnSecondary} 
-  onPress={() => router.push('/home')}
->
-  <Text style={styles.btnSecondaryText}>ENTRAR COMO ONG</Text>
-</TouchableOpacity>
+        {/* Botão Entrar como ONG */}
+        <TouchableOpacity 
+          style={styles.btnSecondary} 
+          onPress={handleLoginONG}
+        >
+          <Text style={styles.btnSecondaryText}>ENTRAR COMO ONG</Text>
+        </TouchableOpacity>
 
         {/* Links de Cadastro */}
         <View style={styles.registerContainer}>
@@ -120,12 +122,6 @@ const styles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
     marginVertical: 30,
-  },
-  title: {
-    color: '#FFF',
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginTop: 10,
   },
   whiteCard: {
     flex: 1,
@@ -181,18 +177,18 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   registerContainer: {
-  alignItems: 'flex-end', // Align os links à direita
-  marginTop: 10,
-  gap: 8,
-  width: '100%',
-},
-registerText: {
-  color: '#169BBA',
-  fontSize: 13,
-  fontWeight: '600',
-  textDecorationLine: 'underline',
-},
-imagem: {
+    alignItems: 'flex-end',
+    marginTop: 10,
+    gap: 8,
+    width: '100%',
+  },
+  registerText: {
+    color: '#169BBA',
+    fontSize: 13,
+    fontWeight: '600',
+    textDecorationLine: 'underline',
+  },
+  imagem: {
     width: 150,
     height: 150,
     resizeMode: 'contain',

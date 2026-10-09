@@ -12,8 +12,13 @@ export default function AccountMenu({ visible, onClose }: Props) {
   const router = useRouter();
 
   const handleNavigate = (route: string) => {
+    // 1. Fecha o menu primeiro
     onClose();
-    router.push(route as any);
+
+    // 2. Executa a navegação de forma assíncrona após o modal fechar
+    setTimeout(() => {
+      router.navigate(route as any);
+    }, 100);
   };
 
   return (
@@ -33,20 +38,20 @@ export default function AccountMenu({ visible, onClose }: Props) {
           <Text style={styles.title}>CONTA</Text>
 
           <View style={styles.menuItems}>
-            {/* Rota atualizada para a tela de edição de informações da ONG */}
+            {/* Rota para abrir informacoes.tsx */}
             <TouchableOpacity 
               style={styles.item} 
-              onPress={() => handleNavigate('/ong-editar-informacoes')}
+              onPress={() => handleNavigate('/informacoes')}
             >
-              <Text style={styles.itemText}>• Informações</Text>
+              <Text style={styles.itemText}>Informações</Text>
             </TouchableOpacity>
 
-            {/* Rota atualizada para a lista de mensagens */}
+            {/* Rota para mensagens */}
             <TouchableOpacity 
               style={styles.item} 
               onPress={() => handleNavigate('/dm-ong')}
             >
-              <Text style={styles.itemText}>• Mensagens</Text>
+              <Text style={styles.itemText}>Mensagens</Text>
             </TouchableOpacity>
           </View>
 
@@ -105,6 +110,7 @@ const styles = StyleSheet.create({
   itemText: {
     color: '#FFF',
     fontSize: 16,
+    fontWeight: 'bold',
   },
   footer: {
     gap: 15,

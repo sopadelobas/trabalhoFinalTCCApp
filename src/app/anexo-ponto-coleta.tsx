@@ -1,11 +1,11 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker'; // Import da biblioteca
+import * as ImagePicker from 'expo-image-picker';
 
 export default function AnexoPontoColeta() {
+  const [imageUri, setImageUri] = useState<string | null>(null);
 
-  // A palavra-chave 'async' DEVE estar aqui na declaração da função
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -15,18 +15,19 @@ export default function AnexoPontoColeta() {
     });
 
     if (!result.canceled) {
-      console.log(result.assets[0].uri);
+      setImageUri(result.assets[0].uri);
     }
   };
 
   return (
-    <View style={styles.container}>
-      {/* O 'pickImage' é chamado no clique do botão */}
+    <SafeAreaView style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={pickImage}>
         <Feather name="camera" size={24} color="#FFF" />
-        <Text style={styles.buttonText}>Selecionar Imagem</Text>
+        <Text style={styles.buttonText}>
+          {imageUri ? 'Imagem Selecionada' : 'Selecionar Imagem'}
+        </Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -35,6 +36,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#FFF',
   },
   button: {
     flexDirection: 'row',

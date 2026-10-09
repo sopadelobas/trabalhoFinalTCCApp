@@ -47,7 +47,7 @@ export default function HomeScreen() {
           {/* Botão 1: Busque auxílio */}
           <TouchableOpacity
             style={styles.actionBtn}
-            onPress={() => router.push('/ajuda')}
+            onPress={() => router.push('/ConvocarOng')}
           >
             <Ionicons name="hand-left-outline" size={22} color="#169BBA" />
             <Text style={styles.actionBtnText}>Busque auxílio</Text>
