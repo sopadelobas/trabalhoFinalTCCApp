@@ -1,3 +1,5 @@
+// src/app/informacoes.tsx
+
 import React, { useState } from 'react';
 import {
   StyleSheet,
@@ -143,8 +145,12 @@ export default function InformacoesScreen() {
                 <Text style={styles.infoText}>(xx) XXXXX-XXXX</Text>
               </View>
 
-              {/* Botão Histórico */}
-              <TouchableOpacity style={styles.historyButton} activeOpacity={0.7}>
+              {/* Botão Histórico conectado com a nova tela */}
+              <TouchableOpacity 
+                style={styles.historyButton} 
+                activeOpacity={0.7}
+                onPress={() => router.push('/historico-v')}
+              >
                 <View style={styles.historyIconCircle}>
                   <Ionicons name="time-outline" size={24} color="#1A93B4" />
                 </View>
@@ -202,10 +208,11 @@ export default function InformacoesScreen() {
         </ScrollView>
       </View>
 
-      {/* Componente AccountMenu integrado */}
+      {/* Componente AccountMenu integrado para Voluntário */}
       <AccountMenu 
         visible={menuVisible} 
         onClose={() => setMenuVisible(false)} 
+        userType="voluntario"
       />
     </SafeAreaView>
   );

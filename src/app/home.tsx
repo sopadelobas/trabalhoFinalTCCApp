@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AccountMenu from '../components/AccountMenu';
 import Loading from '../components/loading';
@@ -34,8 +34,10 @@ export default function HomeScreen() {
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>
-        <TouchableOpacity style={styles.cardHeader}
-        onPress={() => router.push('/controle-doacoes')}>
+        <TouchableOpacity 
+          style={styles.cardHeader}
+          onPress={() => router.push('/controle-doacoes')}
+        >
           <Ionicons name="people-outline" size={24} color="#169BBA" />
           <Text style={styles.cardHeaderText}>Pessoas alcançadas</Text>
         </TouchableOpacity>
@@ -49,16 +51,22 @@ export default function HomeScreen() {
             <Text style={styles.actionButtonText}>Sua ajuda me fortalece</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.actionButton}
-          onPress={() => router.push('/pontos')}>
+          <TouchableOpacity 
+            style={styles.actionButton}
+            onPress={() => router.push('/pontos')}
+          >
             <Ionicons name="people-outline" size={20} color="#169BBA" />
             <Text style={styles.actionButtonText}>Fortalecer os laços</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
 
-      {/* Componente da Aba Conta */}
-      <AccountMenu visible={menuVisible} onClose={() => setMenuVisible(false)} />
+      {/* Componente da Aba Conta com userType="ong" */}
+      <AccountMenu 
+        visible={menuVisible} 
+        onClose={() => setMenuVisible(false)} 
+        userType="ong" 
+      />
     </SafeAreaView>
   );
 }

@@ -1,6 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import React from 'react';
+// src/app/home-v.tsx
+
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,17 +9,26 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useMenu } from '../components/context/MenuContext';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+
+import AccountMenu from '@/components/AccountMenu';
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { openMenu } = useMenu();
+  
+  // Estado para controlar a abertura/fechamento do AccountMenu
+  const [menuVisible, setMenuVisible] = useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
       {/* TopBar com o botão de perfil na direita */}
       <View style={styles.topBar}>
-        <TouchableOpacity style={styles.profileCircle} onPress={openMenu}>
+        <TouchableOpacity 
+          style={styles.profileCircle} 
+          onPress={() => setMenuVisible(true)}
+          activeOpacity={0.7}
+        >
           <Ionicons name="person-circle-outline" size={24} color="#169BBA" />
         </TouchableOpacity>
       </View>
@@ -32,6 +41,7 @@ export default function HomeScreen() {
         <TouchableOpacity
           style={styles.cardAjude}
           onPress={() => router.push('/nichos-v')}
+          activeOpacity={0.8}
         >
           <Ionicons name="heart-outline" size={22} color="#169BBA" />
           <Text style={styles.cardAjudeText}>Ajude uma pessoa</Text>
@@ -48,6 +58,7 @@ export default function HomeScreen() {
           <TouchableOpacity
             style={styles.actionBtn}
             onPress={() => router.push('/ConvocarOng')}
+            activeOpacity={0.7}
           >
             <Ionicons name="hand-left-outline" size={22} color="#169BBA" />
             <Text style={styles.actionBtnText}>Busque auxílio</Text>
@@ -57,6 +68,7 @@ export default function HomeScreen() {
           <TouchableOpacity
             style={styles.actionBtn}
             onPress={() => router.push('/pde-v')}
+            activeOpacity={0.7}
           >
             <Ionicons name="people-outline" size={22} color="#169BBA" />
             <View style={styles.btnTextContainer}>
@@ -69,6 +81,7 @@ export default function HomeScreen() {
           <TouchableOpacity
             style={styles.actionBtn}
             onPress={() => router.push('/canais')}
+            activeOpacity={0.7}
           >
             <Ionicons name="chatbubbles-outline" size={22} color="#169BBA" />
             <Text style={styles.actionBtnText}>Canais</Text>
@@ -80,6 +93,13 @@ export default function HomeScreen() {
           <Text style={styles.footerText}>Todos os direitos reservados ©</Text>
         </View>
       </View>
+
+      {/* Componente do Menu Modal do Voluntário */}
+      <AccountMenu 
+        visible={menuVisible} 
+        onClose={() => setMenuVisible(false)} 
+        userType="voluntario"
+      />
     </SafeAreaView>
   );
 }

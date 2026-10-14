@@ -1,7 +1,8 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import React from 'react';
+// src/app/perfil-ong-detalhes.tsx
+
+import React, { useState } from 'react';
 import {
+  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -9,94 +10,158 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useMenu } from '../components/context/MenuContext';
+import { Feather } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
-interface PedidoNecessidade {
+import AccountMenu from '@/components/AccountMenu';
+
+// Interfaces preparadas para integração com o Backend / API
+interface Fundador {
   id: string;
-  item: string;
-  valorEstimado?: number;
+  nome: string;
+  fotoUrl?: string | null;
 }
 
-export default function DoacaoPedidosScreen() {
+interface MetaSemanal {
+  titulo: string;
+  metaTotal: number;
+  progressoAtual: number;
+}
+
+interface OngPerfilData {
+  nomeOng: string;
+  fundadores: Fundador[];
+  fotosGaleria: string[]; // URLs das imagens da galeria
+  metaSemanal: MetaSemanal;
+}
+
+export default function PerfilOngDetalhesScreen() {
   const router = useRouter();
-  const { openMenu } = useMenu();
+  const [menuVisible, setMenuVisible] = useState(false);
 
-  // Exemplo de lista de necessidades trazidas da ONG
-  const pedidos: PedidoNecessidade[] = [
-    { id: '1', item: '2KG de ração para cachorro filhote', valorEstimado: 35.0 },
-    { id: '2', item: '10 caixas de preditabs\n(Anti-inflamatório)', valorEstimado: 120.0 },
-    { id: '3', item: 'Mantas/Cobertas', valorEstimado: 50.0 },
-  ];
+  // Mock de dados que virão da API / Backend
+  const [ongData] = useState<OngPerfilData>({
+    nomeOng: 'Casa de Cuidados',
+    fundadores: [
+      { id: '1', nome: 'Maria', fotoUrl: null },
+      { id: '2', nome: 'João', fotoUrl: null },
+      { id: '3', nome: 'Ana', fotoUrl: null },
+    ],
+    fotosGaleria: [], // Se vazio, renderiza o placeholder elegante
+    metaSemanal: {
+      titulo: '100 sacos de ração',
+      metaTotal: 100,
+      progressoAtual: 14, // 14%
+    },
+  });
 
-  const handleBack = () => {
+  const porcentagemMeta = Math.min(
+    Math.round((ongData.metaSemanal.progressoAtual / ongData.metaSemanal.metaTotal) * 100),
+    100
+  );
+
+  const handleVoltar = () => {
     if (router.canGoBack()) {
       router.back();
     } else {
-      router.push('/home-v');
+      router.replace('/minhas-ongs' as any);
     }
-  };
-
-  const handleSelecionarPedido = (pedido: PedidoNecessidade) => {
-    // Avança para a tela de finalização passando o item escolhido
-    router.push({
-      pathname: '/doacao-finalizar',
-      params: { itemId: pedido.id, itemNome: pedido.item, valor: pedido.valorEstimado },
-    });
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* TopBar */}
+      {/* TopBar Azul com Botão Voltar e Acesso ao Menu */}
       <View style={styles.topBar}>
-        <TouchableOpacity style={styles.backBtn} onPress={handleBack}>
-          <Ionicons name="chevron-back" size={24} color="#FFF" />
+        <TouchableOpacity onPress={handleVoltar} activeOpacity={0.7} style={styles.backBtn}>
+          <Feather name="chevron-left" size={28} color="#FFF" />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.profileCircle} onPress={openMenu}>
-          <Ionicons name="person-circle-outline" size={24} color="#169BBA" />
+        <TouchableOpacity 
+          style={styles.profileCircle} 
+          onPress={() => setMenuVisible(true)}
+          activeOpacity={0.7}
+        >
+          <View style={styles.innerProfileCircle} />
         </TouchableOpacity>
       </View>
 
-      {/* Card Branco Principal */}
-      <View style={styles.whiteCard}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
+      {/* Cartão Arredondado do Conteúdo Principal */}
+      <View style={styles.cardContainer}>
+        <ScrollView 
+          showsVerticalScrollIndicator={false} 
           contentContainerStyle={styles.scrollContent}
         >
-          {/* Box de Imagem / Banner da ONG */}
-          <View style={styles.ongBannerBox}>
-            <View style={styles.bannerImagePlaceholder}>
-              <Ionicons name="image-outline" size={60} color="#777" />
+          {/* Seção 1: Fundadores */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Fundadores:</Text>
+            <View style={styles.fundadoresRow}>
+              {ongData.fundadores.map((fundador) => (
+                <View key={fundador.id} style={styles.avatarWrapper}>
+                  {fundador.fotoUrl ? (
+                    <Image source={{ uri: fundador.fotoUrl }} style={styles.avatarImage} />
+                  ) : (
+                    <View style={styles.avatarPlaceholder}>
+                      <Feather name="user" size={26} color="#169BBA" />
+                    </View>
+                  )}
+                </View>
+              ))}
             </View>
-            <TouchableOpacity
-              style={styles.conhecerOngBtn}
-              onPress={() => router.push('/informacoes-ong')}
-            >
-              <Text style={styles.conhecerOngText}>conhecer a ong?</Text>
-            </TouchableOpacity>
           </View>
 
-          {/* Título da Seção */}
-          <Text style={styles.sectionTitle}>ESCOLHA UM PEDIDO</Text>
+          {/* Seção 2: Galeria de Fotos */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Fotos:</Text>
+            
+            {ongData.fotosGaleria.length > 0 ? (
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.galeriaScroll}>
+                {ongData.fotosGaleria.map((foto, index) => (
+                  <Image key={index} source={{ uri: foto }} style={styles.fotoItem} />
+                ))}
+              </ScrollView>
+            ) : (
+              <View style={styles.fotoPlaceholderCard}>
+                <Feather name="image" size={42} color="#B0C4DE" />
+                <Text style={styles.fotoPlaceholderText}>Nenhuma foto cadastrada ainda</Text>
+              </View>
+            )}
+          </View>
 
-          {/* Lista de Pedidos */}
-          <View style={styles.pedidosContainer}>
-            {pedidos.map((p) => (
-              <TouchableOpacity
-                key={p.id}
-                style={styles.pedidoBtn}
-                onPress={() => handleSelecionarPedido(p)}
-              >
-                <Text style={styles.pedidoBtnText}>{p.item}</Text>
-              </TouchableOpacity>
-            ))}
+          {/* Seção 3: Metas da Semana */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Metas da Semana:</Text>
+
+            <View style={styles.metaCard}>
+              <Text style={styles.metaTitle}>{ongData.metaSemanal.titulo}</Text>
+
+              {/* Barra de Progresso Customizada */}
+              <View style={styles.progressBarBackground}>
+                <View style={[styles.progressBarFill, { width: `${porcentagemMeta}%` }]} />
+              </View>
+
+              {/* Porcentagem e Botão de Ação alinhados */}
+              <View style={styles.metaFooterRow}>
+                <Text style={styles.porcentagemText}>{porcentagemMeta}% concluído</Text>
+
+                <TouchableOpacity 
+                  style={styles.irVerMetasBtn}
+                  activeOpacity={0.8}
+                  onPress={() => router.push('/metas' as any)}
+                >
+                  <Text style={styles.irVerMetasText}>ir ver metas</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </ScrollView>
-
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>Todos os direitos reservados ©</Text>
-        </View>
       </View>
+
+      {/* Componente AccountMenu Integrado */}
+      <AccountMenu 
+        visible={menuVisible} 
+        onClose={() => setMenuVisible(false)} 
+        userType="voluntario"
+      />
     </SafeAreaView>
   );
 }
@@ -105,103 +170,148 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#169BBA',
-    alignItems: 'stretch',
   },
   topBar: {
-    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingTop: 15,
-    paddingBottom: 5,
+    paddingBottom: 15,
   },
   backBtn: {
-    padding: 5,
+    padding: 4,
   },
   profileCircle: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#FFF',
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 2,
   },
-  whiteCard: {
+  innerProfileCircle: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#FFF',
+  },
+  cardContainer: {
     flex: 1,
     backgroundColor: '#FFF',
     borderTopLeftRadius: 35,
     borderTopRightRadius: 35,
-    paddingHorizontal: 20,
+    paddingHorizontal: 25,
     paddingTop: 25,
-    justifyContent: 'space-between',
-    marginTop: 10,
   },
   scrollContent: {
-    paddingBottom: 20,
-    alignItems: 'center',
+    paddingBottom: 30,
+    gap: 28,
   },
-  ongBannerBox: {
+  section: {
     width: '100%',
-    height: 160,
-    backgroundColor: '#D9E8ED',
-    borderRadius: 20,
-    borderWidth: 1.5,
-    borderColor: '#169BBA',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
-    marginBottom: 25,
-  },
-  bannerImagePlaceholder: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  conhecerOngBtn: {
-    position: 'absolute',
-    bottom: 12,
-    right: 15,
-  },
-  conhecerOngText: {
-    color: '#000',
-    fontSize: 12,
-    fontWeight: 'bold',
-    textDecorationLine: 'underline',
   },
   sectionTitle: {
-    color: '#169BBA',
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
+    fontSize: 15,
+    color: '#555',
+    fontWeight: '600',
+    marginBottom: 12,
   },
-  pedidosContainer: {
-    width: '100%',
-    gap: 15,
-  },
-  pedidoBtn: {
-    width: '100%',
-    borderWidth: 1.5,
-    borderColor: '#169BBA',
-    borderRadius: 20,
-    paddingVertical: 14,
-    paddingHorizontal: 15,
+  fundadoresRow: {
+    flexDirection: 'row',
+    gap: 16,
     alignItems: 'center',
+  },
+  avatarWrapper: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  avatarPlaceholder: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#E0F2F7',
     justifyContent: 'center',
-    backgroundColor: '#FFF',
-  },
-  pedidoBtnText: {
-    color: '#169BBA',
-    fontSize: 14,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  footer: {
-    paddingVertical: 10,
     alignItems: 'center',
+    borderWidth: 1.5,
+    borderColor: '#BCE3EA',
   },
-  footerText: {
-    color: '#888',
-    fontSize: 11,
+  avatarImage: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+  },
+  galeriaScroll: {
+    gap: 12,
+  },
+  fotoItem: {
+    width: 120,
+    height: 90,
+    borderRadius: 15,
+  },
+  fotoPlaceholderCard: {
+    width: '100%',
+    height: 110,
+    borderRadius: 20,
+    backgroundColor: '#F7FAFC',
+    borderWidth: 1.5,
+    borderColor: '#E2E8F0',
+    borderStyle: 'dashed',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 6,
+  },
+  fotoPlaceholderText: {
+    fontSize: 12,
+    color: '#A0AEC0',
+  },
+  metaCard: {
+    backgroundColor: '#F8FDFF',
+    borderRadius: 20,
+    borderWidth: 1.5,
+    borderColor: '#D0ECF3',
+    padding: 16,
+  },
+  metaTitle: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: '#222',
+    textAlign: 'center',
+    marginBottom: 12,
+  },
+  progressBarBackground: {
+    width: '100%',
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#169BBA',
+    backgroundColor: '#FFF',
+    overflow: 'hidden',
+    padding: 2,
+  },
+  progressBarFill: {
+    height: '100%',
+    backgroundColor: '#169BBA',
+    borderRadius: 10,
+  },
+  metaFooterRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 12,
+  },
+  porcentagemText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#169BBA',
+  },
+  irVerMetasBtn: {
+    backgroundColor: '#DDF0F5',
+    paddingVertical: 7,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+  },
+  irVerMetasText: {
+    color: '#169BBA',
+    fontSize: 12,
+    fontWeight: '700',
   },
 });

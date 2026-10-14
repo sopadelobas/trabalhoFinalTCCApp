@@ -1,3 +1,5 @@
+// src/components/AccountMenu.tsx
+
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
@@ -6,19 +8,28 @@ import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 interface Props {
   visible: boolean;
   onClose: () => void;
+  userType?: 'voluntario' | 'ong';
 }
 
-export default function AccountMenu({ visible, onClose }: Props) {
+export default function AccountMenu({ visible, onClose, userType = 'voluntario' }: Props) {
   const router = useRouter();
 
-  const handleNavigate = (route: string) => {
-    // 1. Fecha o menu primeiro
+  const handleIrParaInformacoes = () => {
     onClose();
-
-    // 2. Executa a navegação de forma assíncrona após o modal fechar
     setTimeout(() => {
-      router.navigate(route as any);
-    }, 100);
+      if (userType === 'ong') {
+        router.push('/informacoes-ong');
+      } else {
+        router.push('/informacoes');
+      }
+    }, 120);
+  };
+
+  const handleNavigate = (route: string) => {
+    onClose();
+    setTimeout(() => {
+      router.push(route as any);
+    }, 120);
   };
 
   return (
@@ -29,7 +40,6 @@ export default function AccountMenu({ visible, onClose }: Props) {
       onRequestClose={onClose}
     >
       <View style={styles.overlay}>
-        {/* Lado esquerdo (Menu Azul) */}
         <View style={styles.drawer}>
           <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
             <Ionicons name="close" size={28} color="#FFF" />
@@ -38,21 +48,38 @@ export default function AccountMenu({ visible, onClose }: Props) {
           <Text style={styles.title}>CONTA</Text>
 
           <View style={styles.menuItems}>
-            {/* Rota para abrir informacoes.tsx */}
+            {/* Opção Informações (Comum aos dois perfis) */}
             <TouchableOpacity 
               style={styles.item} 
-              onPress={() => handleNavigate('/informacoes')}
+              onPress={handleIrParaInformacoes}
             >
               <Text style={styles.itemText}>Informações</Text>
             </TouchableOpacity>
 
-            {/* Rota para mensagens */}
-            <TouchableOpacity 
-              style={styles.item} 
-              onPress={() => handleNavigate('/dm-ong')}
-            >
-              <Text style={styles.itemText}>Mensagens</Text>
-            </TouchableOpacity>
+            {/* Menu exclusivo da ONG */}
+            {userType === 'ong' ? (
+              <TouchableOpacity 
+                style={styles.item} 
+                onPress={() => handleNavigate('/dm-ong')}
+              >
+                <Text style={styles.itemText}>Mensagens</Text>
+              </TouchableOpacity>
+            ) : (
+              /* Menu exclusivo do Voluntário */
+              <>
+                <TouchableOpacity style={styles.item} onPress={() => handleNavigate('/agenda')}>
+                  <Text style={styles.itemText}>Agenda</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.item} onPress={() => handleNavigate('/historico-v')}>
+                  <Text style={styles.itemText}>Histórico</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.item} onPress={() => handleNavigate('/minhas-ongs')}>
+                  <Text style={styles.itemText}>Minhas ONG's</Text>
+                </TouchableOpacity>
+              </>
+            )}
           </View>
 
           <View style={styles.footer}>
@@ -68,7 +95,6 @@ export default function AccountMenu({ visible, onClose }: Props) {
           </View>
         </View>
 
-        {/* Lado direito transparente para fechar ao clicar fora */}
         <TouchableOpacity style={styles.backdrop} onPress={onClose} activeOpacity={1} />
       </View>
     </Modal>
@@ -76,53 +102,15 @@ export default function AccountMenu({ visible, onClose }: Props) {
 }
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: 'rgba(0,0,0,0.4)',
-  },
-  drawer: {
-    width: '65%',
-    backgroundColor: '#169BBA',
-    padding: 20,
-    justifyContent: 'space-between',
-  },
-  backdrop: {
-    width: '35%',
-  },
-  closeBtn: {
-    alignSelf: 'flex-end',
-    marginTop: 20,
-  },
-  title: {
-    color: '#FFF',
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 30,
-  },
-  menuItems: {
-    flex: 1,
-    gap: 15,
-  },
-  item: {
-    paddingVertical: 5,
-  },
-  itemText: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  footer: {
-    gap: 15,
-    marginBottom: 20,
-  },
-  footerBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  footerText: {
-    color: '#FFF',
-    fontSize: 16,
-  },
+  overlay: { flex: 1, flexDirection: 'row', backgroundColor: 'rgba(0,0,0,0.4)' },
+  drawer: { width: '65%', backgroundColor: '#169BBA', padding: 20, justifyContent: 'space-between' },
+  backdrop: { width: '35%' },
+  closeBtn: { alignSelf: 'flex-end', marginTop: 20 },
+  title: { color: '#FFF', fontSize: 22, fontWeight: 'bold', marginBottom: 30 },
+  menuItems: { flex: 1, gap: 15 },
+  item: { paddingVertical: 5 },
+  itemText: { color: '#FFF', fontSize: 16, fontWeight: 'bold' },
+  footer: { gap: 15, marginBottom: 20 },
+  footerBtn: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  footerText: { color: '#FFF', fontSize: 16 },
 });
